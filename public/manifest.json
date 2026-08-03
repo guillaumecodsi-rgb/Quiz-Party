@@ -1,0 +1,11 @@
+{
+  "name": "Quiz Party",
+  "short_name": "QuizParty",
+  "description": "Jeu de société multijoueur en ligne",
+  "start_url": "/quiz-party/",
+  "display": "standalone",
+  "background_color": "#1e1b4b",
+  "theme_color": "#6366f1",
+  "lang": "fr",
+  "icons": []
+}

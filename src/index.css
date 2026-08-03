@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-night: #160f2e;
+  --color-night-deep: #100a24;
+  --color-card: #221a44;
+  --color-card-light: #2c2254;
+  --color-panel: #1e2438;
+  --color-panel-light: #283048;
+  --color-gold: #fbbf24;
+  --color-gold-bright: #fde047;
+  --color-electric: #38bdf8;
+  --color-pinkish: #f472b6;
+  --color-lime: #a3e635;
+  --color-danger: #ef4444;
+  --font-display: 'Archivo Black', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background: #160f2e;
+}
+
+body {
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(170deg, #241448 0%, #160f2e 45%, #100a24 100%);
+  background-attachment: fixed;
+  color: #f1f5f9;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+.font-display {
+  font-family: 'Archivo Black', sans-serif;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@keyframes glow-gold {
+  0%, 100% { box-shadow: 0 0 24px rgba(251, 191, 36, 0.35); }
+  50% { box-shadow: 0 0 44px rgba(251, 191, 36, 0.6); }
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0.6; }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.animate-fade-in { animation: fadeIn 0.35s ease-out both; }
+.animate-pop-in { animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.animate-slide-down { animation: slideDown 0.3s ease-out both; }
+.animate-shake { animation: shake 0.4s ease-out; }
+.animate-glow-gold { animation: glow-gold 2.2s infinite; }
+.animate-bounce-subtle { animation: bounce-subtle 1.6s ease-in-out infinite; }
+
+.confetti {
+  position: fixed;
+  top: 0;
+  font-size: 1.6rem;
+  animation: confetti-fall linear both;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ===== Scrollbar ===== */
+.scrollbar-thin::-webkit-scrollbar { width: 5px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(251, 191, 36, 0.25);
+  border-radius: 3px;
+}
+
+/* Safe area for phones */
+.pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
