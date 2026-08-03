@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { FiArrowLeft, FiRefreshCw } from 'react-icons/fi';
+import { FiArrowLeft, FiRefreshCw, FiList, FiSearch } from 'react-icons/fi';
 import type { Theme } from '../types';
 
 const CATEGORY_STYLE: Record<string, { emoji: string; bg: string; border: string }> = {
@@ -49,6 +49,8 @@ export default function ThemeSelectionScreen() {
   };
 
   const [categoryChoices, setCategoryChoices] = useState<string[]>(pickCategories);
+  const [manualMode, setManualMode] = useState(false);
+  const [search, setSearch] = useState('');
 
   const reroll = () => setCategoryChoices(pickCategories());
 
@@ -66,6 +68,83 @@ export default function ThemeSelectionScreen() {
 
   const availableThemes = getAvailableThemes();
 
+  const difficultyStyle: Record<string, string> = {
+    facile: 'text-lime',
+    moyen: 'text-gold',
+    difficile: 'text-pinkish',
+  };
+
+  // ============ MANUAL MODE : full list ============
+  if (manualMode) {
+    const manualList = themes.filter(t =>
+      t.title.toLowerCase().includes(search.toLowerCase()) ||
+      t.category.toLowerCase().includes(search.toLowerCase())
+    );
+
+    return (
+      <div className="h-screen flex flex-col p-4 max-w-md mx-auto pb-safe">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-4 flex-shrink-0">
+          <button
+            onClick={() => setManualMode(false)}
+            className="w-10 h-10 rounded-xl bg-panel-light flex items-center justify-center active:scale-90 transition-transform"
+          >
+            <FiArrowLeft className="text-lg" />
+          </button>
+          <div className="flex-1">
+            <h1 className="font-display text-lg text-gold leading-none">Liste complète</h1>
+            <p className="text-xs font-bold text-slate-500 mt-0.5">{manualList.length} questions</p>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="relative mb-3 flex-shrink-0">
+          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Rechercher une question ou catégorie..."
+            className="w-full pl-11 pr-4 py-3 rounded-xl bg-panel border border-white/10 font-semibold outline-none focus:border-gold/40 placeholder-slate-500 text-sm"
+          />
+        </div>
+
+        {/* Full list */}
+        <div className="flex-1 overflow-y-auto scrollbar-thin space-y-2">
+          {manualList.map(theme => {
+            const style = CATEGORY_STYLE[theme.category] ?? { emoji: '🎯', bg: 'bg-slate-500/15', border: '' };
+            const played = playedThemeIds.includes(theme.id);
+            return (
+              <button
+                key={theme.id}
+                onClick={() => startGame(theme)}
+                className={`w-full text-left px-3.5 py-3 rounded-xl bg-panel border border-white/5 active:scale-[0.98] active:border-gold/50 transition-all flex items-center gap-3 ${
+                  played ? 'opacity-40' : ''
+                }`}
+              >
+                <span className={`w-10 h-10 rounded-xl ${style.bg} flex items-center justify-center text-xl flex-shrink-0`}>
+                  {style.emoji}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="font-extrabold text-sm leading-snug">
+                    {theme.title} {played && '✓'}
+                  </p>
+                  <p className="text-[11px] font-bold text-slate-500 mt-0.5">
+                    {theme.answers.length} réponses • <span className={difficultyStyle[theme.difficulty]}>{theme.difficulty}</span>
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+          {manualList.length === 0 && (
+            <p className="text-center text-slate-500 font-bold py-8">Aucune question trouvée</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ============ CATEGORY MODE : 3 random categories ============
   return (
     <div className="h-screen flex flex-col p-4 max-w-md mx-auto pb-safe overflow-hidden">
       {/* Header */}
@@ -126,6 +205,14 @@ export default function ThemeSelectionScreen() {
           );
         })}
       </div>
+
+      {/* Manual pick */}
+      <button
+        onClick={() => setManualMode(true)}
+        className="mt-3 py-3 rounded-2xl bg-panel-light font-extrabold text-slate-300 flex items-center justify-center gap-2 active:scale-[0.98] transition-transform flex-shrink-0"
+      >
+        <FiList /> Choisir dans la liste complète
+      </button>
     </div>
   );
 }
